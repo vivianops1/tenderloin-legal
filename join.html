@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join a Tenderloin session</title>
+<meta name="description" content="You've been invited to a Tenderloin session.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#1A1A2E;color:#FFF8F7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+main{max-width:520px;margin:0 auto;padding:64px 24px 80px;text-align:center}
+h1{color:#FFD166;font-size:2.2rem;font-weight:900;letter-spacing:1px;margin:0 0 4px}
+.tagline{color:#FFF8F7;opacity:.75;margin:0 0 36px;font-size:1.05rem}
+.codeLabel{color:#999;font-size:.8rem;font-weight:700;letter-spacing:2px;margin:0 0 8px}
+.code{font-size:3.4rem;font-weight:900;color:#FFD166;letter-spacing:14px;margin:0 0 8px;padding-left:14px}
+.codeNote{color:#999;font-size:.9rem;margin:0 0 36px}
+.buttons{display:flex;flex-direction:column;gap:14px;max-width:380px;margin:0 auto}
+.btn{display:block;background:#FFD166;color:#1A1A2E;font-weight:800;font-size:1.05rem;text-decoration:none;padding:16px 28px;border-radius:14px;text-align:center;border:none;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.secondary{background:transparent;color:#FFD166;border:2px solid #FFD166}
+.steps{color:#999;font-size:.85rem;margin:28px auto 0;max-width:380px;text-align:left;line-height:1.7}
+footer{margin-top:48px;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;color:#999;font-size:.8rem}
+footer a{color:#FFD166}
+@media(max-width:480px){main{padding:44px 18px 64px}h1{font-size:1.8rem}.code{font-size:2.6rem;letter-spacing:10px;padding-left:10px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>TENDERLOIN</h1>
+  <p class="tagline">You're invited to decide where to eat.</p>
+
+  <p class="codeLabel">SESSION CODE</p>
+  <p class="code" id="code">----</p>
+  <p class="codeNote" id="codeNote">Open Tenderloin and enter this code to join.</p>
+
+  <div class="buttons">
+    <a class="btn" id="openApp" href="#">Open in App</a>
+    <a class="btn secondary" id="getApp" href="#">Get the App</a>
+  </div>
+
+  <div class="steps">
+    Don't have the app yet?
+    <br>1. Tap <strong>Get the App</strong> and install Tenderloin.
+    <br>2. Open the app and tap <strong>Join a Session</strong>.
+    <br>3. Enter the code above.
+  </div>
+
+  <footer>
+    Made by VivianOps LLC, Liberty, Missouri.<br>
+    <a href="index.html">Privacy &amp; Terms</a>
+  </footer>
+</main>
+
+<script>
+  // PLACEHOLDER store URL — swap for the real App Store / Play Store listing
+  // once published. Carrying the code through install (deferred deep-linking)
+  // is a later project; for now invitees install, open the app, and type the
+  // code shown above.
+  var STORE_URL = "https://play.google.com/store/apps/details?id=com.vivianops.tenderloin";
+
+  function getCode() {
+    var params = new URLSearchParams(window.location.search);
+    var raw = (params.get("code") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
+    return raw;
+  }
+
+  var code = getCode();
+  var openApp = document.getElementById("openApp");
+  var getApp = document.getElementById("getApp");
+  getApp.href = STORE_URL;
+
+  if (code.length === 4) {
+    document.getElementById("code").textContent = code;
+    openApp.href = "tenderloin://join?code=" + code;
+  } else {
+    // No valid code in the link — hide the join affordances and explain.
+    document.getElementById("code").textContent = "????";
+    document.getElementById("codeNote").textContent =
+      "This invite link is missing a session code. Ask the host to resend it.";
+    openApp.style.display = "none";
+  }
+</script>
+</body>
+</html>
